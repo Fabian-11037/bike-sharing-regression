@@ -1,0 +1,746 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Introducción &#8212; Bike Sharing Regression</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/01-introduction';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Ingeniería de Variables" href="02-ingenieria-de-variables.html" />
+    <link rel="prev" title="0. Guía de Reproducción" href="00-instructions.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Bike Sharing Regression - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Bike Sharing Regression - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    bike-sharing-regression
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-instructions.html">0. Guía de Reproducción</a></li>
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Introducción</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02-ingenieria-de-variables.html">2. Ingeniería de Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-eda.html">3. Análisis Exploratorio de Series Temporales</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="04-ols-matrix.html">4. Formulación matricial del modelo OLS (Mínimos cuadrados)</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="05-inference.html">5. Inferencia y grados de libertad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-diagnostics.html">6. Diagnóstico de supuestos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-robust-methods.html">7. Remedios y métodos robustos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-validation.html">8. Validación y selección de modelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-montecarlo.html">9. Simulación Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-interpretation.html">10. Interpretación de Resultados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-conclusions.html">10. Respuesta a preguntas Iniciales</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Fabian-11037/bike-sharing-regression/tree/main" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Fabian-11037/bike-sharing-regression/tree/main/issues/new?title=Issue%20on%20page%20%2FNotebooks/01-introduction.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/Notebooks/01-introduction.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>1. Introducción</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">1. Introducción</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valor-como-sensor-urbano">1.1 Valor como sensor urbano</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-de-conjunto-de-datos">1.2 Descripción de Conjunto de Datos</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivos">2. Objetivos</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-general">2.1 Objetivo General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivos-especificos">2.2 Objetivos Específicos</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-de-movilidad-urbana">2. Contexto de Movilidad Urbana</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#revision-teorica">2.1 Revisión teórica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-de-bicicletas-compartidas">2.2 Sistemas de bicicletas compartidas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preguntas-de-investigacion">2.3 Preguntas de Investigación</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduccion">
+<h1>1. Introducción<a class="headerlink" href="#introduccion" title="Link to this heading">#</a></h1>
+<p>Los sistemas de bicicletas compartidas constituyen una herramienta esencial para la movilidad urbana sostenible. Su funcionamiento automatizado permite registrar datos sobre el comportamiento de los usuarios y las condiciones externas, facilitando el análisis y la predicción de la demanda de bicicletas.</p>
+<p>Estos datos pueden aprovecharse para optimizar la distribución de bicicletas, anticipar picos de demanda y mejorar la planificación urbana.</p>
+<p>Esto podría ser útil en ciudades como Barranquilla, que padecen de problemas de movibilidad y, por tanto, podrían verse beneficiados de alternativas de movilidad. Conocer la posible demanda de uso de Barranquilla otorgaría herramientas para planificar la masificación de sistemas de alquileres que, de la mano con zonificaciones y contrucciones de ciclo rutas, permitiría a la gente desplzarse con mayor facilidad.</p>
+<section id="valor-como-sensor-urbano">
+<h2>1.1 Valor como sensor urbano<a class="headerlink" href="#valor-como-sensor-urbano" title="Link to this heading">#</a></h2>
+<p>Cada bicicleta compartida puede considerarse un sensor móvil que captura información sobre espacio, tiempo y clima. Esta perspectiva permite interpretar el sistema como una red de observación distribuida que refleja los patrones de movilidad urbana.</p>
+<p>Adicionalmente, ofrecer alternativas más ambientalmente sostenible al vehículo tradicional es vital hoy en día, viviendo con la amenaza del calentamiento global y la necesidad de reducir emisiones.</p>
+</section>
+<section id="descripcion-de-conjunto-de-datos">
+<h2>1.2 Descripción de Conjunto de Datos<a class="headerlink" href="#descripcion-de-conjunto-de-datos" title="Link to this heading">#</a></h2>
+<p>El conjunto contiene:</p>
+<ul class="simple">
+<li><p>Conteos horarios y diarios de alquiler: cnt (total), casual, registered.</p></li>
+<li><p>Variables temporales: hora, día, estación, feriado, día laboral.</p></li>
+<li><p>Variables meteorológicas: temperatura, humedad, velocidad del viento.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Descripción</p></th>
+<th class="head"><p>Rango / Categorías</p></th>
+<th class="head"><p>Importancia para la movilidad</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>instant</p></td>
+<td><p>Entero</p></td>
+<td><p>Identificador de registro</p></td>
+<td><p>1 … n</p></td>
+<td><p>No relevante (solo ID)</p></td>
+</tr>
+<tr class="row-odd"><td><p>dteday</p></td>
+<td><p>Fecha</p></td>
+<td><p>Fecha completa</p></td>
+<td><p>2011–2012</p></td>
+<td><p>Importancia baja (solo índice temporal; la información útil proviene de año/mes/día)</p></td>
+</tr>
+<tr class="row-even"><td><p>season</p></td>
+<td><p>Categórica</p></td>
+<td><p>Estación del año</p></td>
+<td><p>1: Invierno, 2: Primavera, 3: Verano, 4: Otoño</p></td>
+<td><p>Alta: patrones estacionales fuertes; mayor uso en verano/otoño</p></td>
+</tr>
+<tr class="row-odd"><td><p>yr</p></td>
+<td><p>Binaria</p></td>
+<td><p>Año (tendencia)</p></td>
+<td><p>0: 2011, 1: 2012</p></td>
+<td><p>Alta: fuerte tendencia al alza por crecimiento del sistema</p></td>
+</tr>
+<tr class="row-even"><td><p>mnth</p></td>
+<td><p>Entero</p></td>
+<td><p>Mes del año</p></td>
+<td><p>1–12</p></td>
+<td><p>Media/Alta: captura estacionalidad y efectos de clima mensual</p></td>
+</tr>
+<tr class="row-odd"><td><p>hr</p></td>
+<td><p>Entero</p></td>
+<td><p>Hora del día</p></td>
+<td><p>0–23</p></td>
+<td><p>Muy alta: patrón horario dominante; picos en horas commuting</p></td>
+</tr>
+<tr class="row-even"><td><p>holiday</p></td>
+<td><p>Binaria</p></td>
+<td><p>Si es día festivo</p></td>
+<td><p>0/1</p></td>
+<td><p>Media: suele disminuir demanda en festivos</p></td>
+</tr>
+<tr class="row-odd"><td><p>weekday</p></td>
+<td><p>Entero</p></td>
+<td><p>Día de la semana</p></td>
+<td><p>0–6</p></td>
+<td><p>Media: patrones laborales afectan uso</p></td>
+</tr>
+<tr class="row-even"><td><p>workingday</p></td>
+<td><p>Binaria</p></td>
+<td><p>Día laboral</p></td>
+<td><p>0/1</p></td>
+<td><p>Alta: la demanda sube en días laborales para commuting</p></td>
+</tr>
+<tr class="row-odd"><td><p>weathersit</p></td>
+<td><p>Categórica</p></td>
+<td><p>Condición climática</p></td>
+<td><p>1, 2, 3</p></td>
+<td><p>Muy alta: clima adverso reduce significativamente la demanda</p></td>
+</tr>
+<tr class="row-even"><td><p>temp</p></td>
+<td><p>Continua</p></td>
+<td><p>Temperatura normalizada</p></td>
+<td><p>0.02–1.00</p></td>
+<td><p>Muy alta: principal determinante físico del uso</p></td>
+</tr>
+<tr class="row-odd"><td><p>atemp</p></td>
+<td><p>Continua</p></td>
+<td><p>Sensación térmica normalizada</p></td>
+<td><p>0.01–1.00</p></td>
+<td><p>Alta (correlacionada con temp)</p></td>
+</tr>
+<tr class="row-even"><td><p>hum</p></td>
+<td><p>Continua</p></td>
+<td><p>Humedad relativa normalizada</p></td>
+<td><p>0–1</p></td>
+<td><p>Media: altas humedades disminuyen uso, pero menos que temp</p></td>
+</tr>
+<tr class="row-odd"><td><p>windspeed</p></td>
+<td><p>Continua</p></td>
+<td><p>Velocidad de viento normalizada</p></td>
+<td><p>0–1</p></td>
+<td><p>Baja/Media: efecto menor salvo vientos fuertes</p></td>
+</tr>
+<tr class="row-even"><td><p>casual</p></td>
+<td><p>Entero</p></td>
+<td><p>Usuarios casuales</p></td>
+<td><p>≥ 0</p></td>
+<td><p>Variable objetivo secundaria (usuario de ocio)</p></td>
+</tr>
+<tr class="row-odd"><td><p>registered</p></td>
+<td><p>Entero</p></td>
+<td><p>Usuarios registrados</p></td>
+<td><p>≥ 0</p></td>
+<td><p>Variable objetivo secundaria (usuario regular)</p></td>
+</tr>
+<tr class="row-even"><td><p>cnt</p></td>
+<td><p>Entero</p></td>
+<td><p>Total de usuarios</p></td>
+<td><p>≥ 0</p></td>
+<td><p>Variable objetivo principal</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="objetivos">
+<h1>2. Objetivos<a class="headerlink" href="#objetivos" title="Link to this heading">#</a></h1>
+<section id="objetivo-general">
+<h2>2.1 Objetivo General<a class="headerlink" href="#objetivo-general" title="Link to this heading">#</a></h2>
+<p>Aplicar métodos de regresión lineal múltiple para predecir la demanda horaria de bicicletas compartidas, considerando la influencia de variables meteorológicas, temporales y contextuales.</p>
+</section>
+<section id="objetivos-especificos">
+<h2>2.2 Objetivos Específicos<a class="headerlink" href="#objetivos-especificos" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Depurar y preparar los datos utilizando herramientas de limpieza de datos en el lenguaje de programación Python.</p></li>
+<li><p>Realizar análisis exploratorio de los datos para sacar conclusiones.</p></li>
+<li><p>Realizar un módelo de regresión lineal utilizando la forma matricial de mínimos cuadrados.</p></li>
+<li><p>Realizar inferencias sobre el módelo obtenido.</p></li>
+<li><p>Evaluar los supuestos necesarios para la realización de inferencias en módelo lineal de mínimos cuadrados.</p></li>
+<li><p>Análizar cambios en los resultados tras utilizar métodos más robustos para la presencia de heterocedasticidad.</p></li>
+<li><p>Comparar resultados de módelos más compleajos utilizando Ridge y Lasso.</p></li>
+<li><p>Seleccionar un modelo en base los resultados obtenidos.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="contexto-de-movilidad-urbana">
+<h1>2. Contexto de Movilidad Urbana<a class="headerlink" href="#contexto-de-movilidad-urbana" title="Link to this heading">#</a></h1>
+<section id="revision-teorica">
+<h2>2.1 Revisión teórica<a class="headerlink" href="#revision-teorica" title="Link to this heading">#</a></h2>
+<p>La movilidad urbana se refiere al conjunto de desplazamientos que realizan las personas dentro de una ciudad para acceder a bienes, servicios, actividades económicas, educativas y sociales. Es un componente esencial del funcionamiento urbano porque determina la accesibilidad, la eficiencia del transporte, la cohesión social y la sostenibilidad ambiental.</p>
+<p>Desde la perspectiva teórica, la movilidad urbana se analiza integrando elementos de:</p>
+<ol class="arabic simple">
+<li><p><strong>Demanda de transporte</strong></p></li>
+<li><p><strong>Oferta de transporte</strong></p></li>
+<li><p><strong>Interacciones espacio–tiempo</strong></p></li>
+<li><p><strong>Sostenibilidad urbana</strong></p></li>
+</ol>
+<p>Se promueven modos sostenibles como la bicicleta debido a su bajo impacto ambiental y bajo costo operativo.</p>
+</section>
+<section id="sistemas-de-bicicletas-compartidas">
+<h2>2.2 Sistemas de bicicletas compartidas<a class="headerlink" href="#sistemas-de-bicicletas-compartidas" title="Link to this heading">#</a></h2>
+<p>Los sistemas de bicicletas compartidas (Bike Sharing Systems, BSS) constituyen una infraestructura moderna que combina movilidad física y plataformas de información digital. Su operación genera una gran cantidad de datos de uso en tiempo real, convirtiéndolos en una fuente valiosa de datos urbanos. Son servicios que ofrecen bicicletas para alquiler por períodos cortos mediante estaciones automáticas, aplicaciones móviles, sistemas sin anclaje (dockless), entre otros.</p>
+<p>El usuario toma una bicicleta en un punto y la devuelve en otro, facilitando viajes de corta distancia y conectividad con otros modos de transporte.</p>
+<p>Cada viaje registrado proporciona información valios como hora de inicio y fin, estación origen y destino, duración del viaje, tipo de usuario (ocasional o registrado), datos meteorológicos asociados (temperatura, humedad, clima) e información agregada de demanda por hora o día.</p>
+</section>
+<section id="preguntas-de-investigacion">
+<h2>2.3 Preguntas de Investigación<a class="headerlink" href="#preguntas-de-investigacion" title="Link to this heading">#</a></h2>
+<p>En base a lo expùesto anteriormente, se realizan las siguientes preguntas:</p>
+<ul class="simple">
+<li><p>¿Cuales son las variables más relevante para determinar el uso de bicicletas compartidas en una ciudad?</p></li>
+<li><p>¿Son estás variables predictores rigurosos, es decir, su coeficiente afecta significativamente el uso?</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="00-instructions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">0. Guía de Reproducción</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02-ingenieria-de-variables.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2. Ingeniería de Variables</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">1. Introducción</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valor-como-sensor-urbano">1.1 Valor como sensor urbano</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descripcion-de-conjunto-de-datos">1.2 Descripción de Conjunto de Datos</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivos">2. Objetivos</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-general">2.1 Objetivo General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivos-especificos">2.2 Objetivos Específicos</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-de-movilidad-urbana">2. Contexto de Movilidad Urbana</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#revision-teorica">2.1 Revisión teórica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-de-bicicletas-compartidas">2.2 Sistemas de bicicletas compartidas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preguntas-de-investigacion">2.3 Preguntas de Investigación</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Fabian Manrique
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

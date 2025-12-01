@@ -1,0 +1,804 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>0. Guía de Reproducción &#8212; Bike Sharing Regression</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/00-instructions';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introducción" href="01-introduction.html" />
+    <link rel="prev" title="bike-sharing-regression" href="../README.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Bike Sharing Regression - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Bike Sharing Regression - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    bike-sharing-regression
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">0. Guía de Reproducción</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="01-introduction.html">1. Introducción</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02-ingenieria-de-variables.html">2. Ingeniería de Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-eda.html">3. Análisis Exploratorio de Series Temporales</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="04-ols-matrix.html">4. Formulación matricial del modelo OLS (Mínimos cuadrados)</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="05-inference.html">5. Inferencia y grados de libertad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-diagnostics.html">6. Diagnóstico de supuestos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-robust-methods.html">7. Remedios y métodos robustos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-validation.html">8. Validación y selección de modelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-montecarlo.html">9. Simulación Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-interpretation.html">10. Interpretación de Resultados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-conclusions.html">10. Respuesta a preguntas Iniciales</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Fabian-11037/bike-sharing-regression/tree/main" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Fabian-11037/bike-sharing-regression/tree/main/issues/new?title=Issue%20on%20page%20%2FNotebooks/00-instructions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/Notebooks/00-instructions.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>0. Guía de Reproducción</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">0. Guía de Reproducción</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instalacion-de-modulos">0.1 Instalación de módulos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inicializar-jupyter-book">0.2 Inicializar Jupyter-Book</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilar-el-libro">0.3 Compilar el libro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#publicar-en-github-pages">0.4 Publicar en GitHub Pages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-de-carpetas">0.5 Estructura de carpetas</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#obtencion-del-dataset">1. Obtención del dataset</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-del-libro">2. Estructura del libro</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#demostraciones">3. Demostraciones</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-grados-de-libertad-ss-res">3.1 Demostración Grados de Libertad <span class="math notranslate nohighlight">\(SS_{Res}\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ms-res-es-estimador-insesgado-de-sigma-2">3.2 <span class="math notranslate nohighlight">\(MS_{Res}\)</span> es estimador insesgado de <span class="math notranslate nohighlight">\(\sigma^2\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-valor-esperado-del-error-medio-de-regresion">3.3 Demostración Valor esperado del error medio de regresión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-estadistico-f-0">3.4 Demostración estadístico <span class="math notranslate nohighlight">\(F_0\)</span></a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>list<span class="w"> </span>--format<span class="o">=</span>freeze<span class="w"> </span>&gt;<span class="w"> </span>../requirements.txt
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="guia-de-reproduccion">
+<h1>0. Guía de Reproducción<a class="headerlink" href="#guia-de-reproduccion" title="Link to this heading">#</a></h1>
+<section id="instalacion-de-modulos">
+<h2>0.1 Instalación de módulos<a class="headerlink" href="#instalacion-de-modulos" title="Link to this heading">#</a></h2>
+<p>Para compilar el libro, es necesario instalar Jupyter-book usando pip. La versión de jupyter-book a usar puede encontrarse en el archivo requirement.txt.</p>
+<p>Puede instalar todos los paquetes requeridos utilizando el siguiente comando en una consola de texto:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>../requirements.txt
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inicializar-jupyter-book">
+<h2>0.2 Inicializar Jupyter-Book<a class="headerlink" href="#inicializar-jupyter-book" title="Link to this heading">#</a></h2>
+<p>Tras instalar Jupyter-book, inicializar un libro con el comando:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>jupyter-book<span class="w"> </span>create<span class="w"> </span>.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Tras lo cual, se debe agregar los capítulos en book/_toc.yml.</p>
+</section>
+<section id="compilar-el-libro">
+<h2>0.3 Compilar el libro<a class="headerlink" href="#compilar-el-libro" title="Link to this heading">#</a></h2>
+<p>Una vez agregado los capítulos, compilar el libro usando el comando:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>jupyter-book<span class="w"> </span>build<span class="w"> </span>.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Verificar que no haya errores. El resultado estará en _build/html/.</p>
+</section>
+<section id="publicar-en-github-pages">
+<h2>0.4 Publicar en GitHub Pages<a class="headerlink" href="#publicar-en-github-pages" title="Link to this heading">#</a></h2>
+<p>Use el siguiente comando para publicar el libro en GitHub Pages:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ghp-import<span class="w"> </span>-n<span class="w"> </span>-p<span class="w"> </span>-f<span class="w"> </span>_build/html
+</pre></div>
+</div>
+</div>
+</div>
+<p>Es necesario tener un repositorio activo en la carpeta del libro. Se creará un nuevo branch con los archivos necesario para la visualización del libro.</p>
+</section>
+<section id="estructura-de-carpetas">
+<h2>0.5 Estructura de carpetas<a class="headerlink" href="#estructura-de-carpetas" title="Link to this heading">#</a></h2>
+<p>Crear la siguiente estructura de carpetas en la carpeta principal del proyecto:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>book/
+├── Data/
+├── notebooks/
+├── _build/
+└── _config.yml
+</pre></div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="obtencion-del-dataset">
+<h1>1. Obtención del dataset<a class="headerlink" href="#obtencion-del-dataset" title="Link to this heading">#</a></h1>
+<p>El dataset puede ser descargado del siguiente <a class="reference external" href="https://github.com/lihkir/Data/blob/main/hour.csv">link</a>.</p>
+<p>También puede ejecutar el siguiente códiggo para descargar el archivo automaticamente.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://raw.githubusercontent.com/lihkir/Data/refs/heads/main/hour.csv&#39;</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../Data/hour.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1139356
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="estructura-del-libro">
+<h1>2. Estructura del libro<a class="headerlink" href="#estructura-del-libro" title="Link to this heading">#</a></h1>
+<p>El libro contiene los siguientes notebooks:</p>
+<p>root: <a class="reference external" href="http://README.md">README.md</a></p>
+<p>chapters:</p>
+<ul class="simple">
+<li><p>file: Notebooks/00-instructions</p></li>
+<li><p>file: Notebooks/01-introduction</p></li>
+<li><p>file: Notebooks/02-data-cleaning</p></li>
+<li><p>file: Notebooks/03-eda</p></li>
+<li><p>file: Notebooks/04-ols-matrix</p></li>
+<li><p>file: Notebooks/05-inference</p></li>
+<li><p>file: Notebooks/06-diagnostics</p></li>
+<li><p>file: Notebooks/07-robust-methods</p></li>
+<li><p>file: Notebooks/08-validation</p></li>
+<li><p>file: Notebooks/09-interpretation</p></li>
+<li><p>file: Notebooks/10-conclusions</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="demostraciones">
+<h1>3. Demostraciones<a class="headerlink" href="#demostraciones" title="Link to this heading">#</a></h1>
+<section id="demostracion-grados-de-libertad-ss-res">
+<h2>3.1 Demostración Grados de Libertad <span class="math notranslate nohighlight">\(SS_{Res}\)</span><a class="headerlink" href="#demostracion-grados-de-libertad-ss-res" title="Link to this heading">#</a></h2>
+<p>Consideramos el modelo lineal múltiple
+$<span class="math notranslate nohighlight">\(y = X \beta+\epsilon\)</span>$</p>
+<p>Donde <span class="math notranslate nohighlight">\(y ∈ R^n\)</span>, <span class="math notranslate nohighlight">\(X ∈ R^{nxp}\)</span> con rango completo <span class="math notranslate nohighlight">\(rank(X) = p\)</span>, <span class="math notranslate nohighlight">\(\beta ∈ R^p\)</span> y <span class="math notranslate nohighlight">\(\epsilon\)</span> son errores con <span class="math notranslate nohighlight">\(E[\epsilon] = 0\)</span> y <span class="math notranslate nohighlight">\(Var(\epsilon) = \sigma^2I_n\)</span></p>
+<p>Denotamos la matriz de proyección (matriz hat):</p>
+<div class="math notranslate nohighlight">
+\[H = X(X'X)^{-1}X'\]</div>
+<p>Los residuos son <span class="math notranslate nohighlight">\(e = y - \hat{y} = (I-H)y\)</span>. La suma de cuadrados <span class="math notranslate nohighlight">\(SS_{Res}\)</span> será igual entonces a:</p>
+<div class="math notranslate nohighlight">
+\[SSRes = e'e = y'(I-H)y\]</div>
+<p>Se puede demostrar que H es simétrica e idempotente:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(H' = (X(X'X)^{-1}X')' = X(X'X)^{-1}X' = H\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(H^2 = X(X'X)^{-1}X'X(X'X)^{-1}X' = X(X'X)^{-1}X' = H\)</span></p></li>
+</ul>
+<p>Por tanto, (I-H) también será simétrica e idempotente:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\((I-H)' = I' - H' = I - H\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((I-H)^2 = I - 2H + H^2 = I - H\)</span></p></li>
+</ul>
+<p>La traza de una matriz idempotente es igual a su rango. Además,</p>
+<div class="math notranslate nohighlight">
+\[tr(H) = tr(X(X'X)^{-1}X') = tr((X'X)^{-1}X'X) = tr(I_p) = p\]</div>
+<p>Usando <span class="math notranslate nohighlight">\(tr(AB) = tr(BA)\)</span> cuando los tamaños lo permiten.</p>
+<p>Además:
+$<span class="math notranslate nohighlight">\( tr(I-H) = tr(I) - tr(H) = n- p\)</span>$</p>
+<p>Como I - H es idempotente, su traza = su rango, por tanto:
+$<span class="math notranslate nohighlight">\(rank(I-H) = n-p\)</span>$</p>
+<hr class="docutils" />
+<p>Si además <span class="math notranslate nohighlight">\(\varepsilon \sim N(0, \sigma^2 I)\)</span>, entonces:</p>
+<div class="math notranslate nohighlight">
+\[
+e = (I-H)y= (I-H)\varepsilon.
+\]</div>
+<p>porque <span class="math notranslate nohighlight">\((I-H)X\beta = 0\)</span></p>
+<p>Entonces
+$<span class="math notranslate nohighlight">\(SSRes = e'e = \varepsilon'(I-H)\varepsilon\)</span>$</p>
+<p>Dado que <span class="math notranslate nohighlight">\((𝐼-𝐻)\)</span> es simétrica y semidefinida positiva, existe una matriz ortogonal 𝑃 que diagonaliza <span class="math notranslate nohighlight">\((𝐼−𝐻)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+P'(I-H)P = 
+\begin{pmatrix}
+I_{n-p} &amp; 0 \\
+0 &amp; 0_p
+\end{pmatrix}.
+\end{split}\]</div>
+<p>donde hay n-p unos en la diagonal (porque <span class="math notranslate nohighlight">\(rank(I-H)=n-p\)</span>) y <span class="math notranslate nohighlight">\(p\)</span> ceros.</p>
+<p>Sea <span class="math notranslate nohighlight">\(z = P'\varepsilon\)</span>. Como P es ortogonal y <span class="math notranslate nohighlight">\(\varepsilon \sim N(0, \sigma^2 I)\)</span>, resulta <span class="math notranslate nohighlight">\(z \sim N(0,\sigma^2 I)\)</span>. Entonces:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathrm{SSRes} = \varepsilon'(I-H)\varepsilon = z'\begin{pmatrix}
+I_{n-p} &amp; 0 \\
+0 &amp; 0_p
+\end{pmatrix}z = \sum_{i=1}^{n-p} z_i^2.
+\end{split}\]</div>
+<p>Dividiendo por $\sigma^2$:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{SSRes}}{\sigma^2} 
+= \sum_{i=1}^{n-p} \left(\frac{z_i}{\sigma}\right)^2
+\sim \chi^2_{\,n-p}.
+\]</div>
+</section>
+<section id="ms-res-es-estimador-insesgado-de-sigma-2">
+<h2>3.2 <span class="math notranslate nohighlight">\(MS_{Res}\)</span> es estimador insesgado de <span class="math notranslate nohighlight">\(\sigma^2\)</span><a class="headerlink" href="#ms-res-es-estimador-insesgado-de-sigma-2" title="Link to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[E(MS_{Res} = E(SS_{Res}/(n-p)) = \frac{\sigma^2}{n-p}E(SS_{Res}/\sigma^2)\]</div>
+<p>Como <span class="math notranslate nohighlight">\(\frac{SS_Res}{\sigma^2} \sim \chi^2_{\,n-p}\)</span>, entonces:
+$<span class="math notranslate nohighlight">\(E(\frac{SS_Res}{\sigma^2}) = n-p\)</span>$</p>
+<p>Entonces,
+$<span class="math notranslate nohighlight">\(E(MS_{Res}) = \frac{\sigma^2}{n-p} * (n-p) = \sigma^2\)</span>$</p>
+</section>
+<section id="demostracion-valor-esperado-del-error-medio-de-regresion">
+<h2>3.3 Demostración Valor esperado del error medio de regresión<a class="headerlink" href="#demostracion-valor-esperado-del-error-medio-de-regresion" title="Link to this heading">#</a></h2>
+<p>La suma de cuadrados de la regresión (SSR), medida respecto de la media, puede escribirse como
+$<span class="math notranslate nohighlight">\(
+\mathrm{SSR} = \hat{y}'\hat{y} - n\bar{y}^2 = y'(H-J)y = y'(H-J)y,
+\)</span><span class="math notranslate nohighlight">\(
+donde \)</span>\hat{y}=Hy<span class="math notranslate nohighlight">\( y \)</span>\bar y=(1/n)\mathbf{1}’y<span class="math notranslate nohighlight">\(. La matriz \)</span>H-J<span class="math notranslate nohighlight">\( proyecta sobre el subespacio de \)</span>\operatorname{col}(X)<span class="math notranslate nohighlight">\( ortogonal al vector de unos; es simétrica e idempotente con traza \)</span>\operatorname{tr}(H-J)=\operatorname{tr}(H)-\operatorname{tr}(J)=p-1$.</p>
+<p>El Mean Square Regression se define como
+$<span class="math notranslate nohighlight">\(
+\mathrm{MSR}=\frac{\mathrm{SSR}}{p-1}.
+\)</span>$</p>
+<hr class="docutils" />
+<p>Sustituimos <span class="math notranslate nohighlight">\(y=X\beta+\varepsilon\)</span> en la expresión de SSR:
+$$\begin{aligned}
+\mathrm{SSR}
+&amp;= (X\beta+\varepsilon)’(H-J)(X\beta+\varepsilon) \
+&amp;= \beta’X’(H-J)X\beta</p>
+<ul class="simple">
+<li><p>2\beta’X’(H-J)\varepsilon</p></li>
+<li><p>\varepsilon’(H-J)\varepsilon.
+\end{aligned}$$</p></li>
+</ul>
+<p>Tomando esperanza y usando <span class="math notranslate nohighlight">\(E[\varepsilon]=0\)</span> y <span class="math notranslate nohighlight">\(E[\varepsilon\varepsilon']=\sigma^2 I_n\)</span>, los términos cruzados desaparecen y el término cuadrático en <span class="math notranslate nohighlight">\(\varepsilon\)</span> tiene esperanza <span class="math notranslate nohighlight">\(\sigma^2\operatorname{tr}(H-J)\)</span>. Así:
+$<span class="math notranslate nohighlight">\(
+\begin{aligned}
+E[\mathrm{SSR}]
+&amp;= \beta'X'(H-J)X\beta + E[\varepsilon'(H-J)\varepsilon] \\
+&amp;= \beta'X'(H-J)X\beta + \sigma^2\operatorname{tr}(H-J).
+\end{aligned}
+\)</span>$</p>
+<p>Como <span class="math notranslate nohighlight">\(\operatorname{tr}(H)=p\)</span> y <span class="math notranslate nohighlight">\(\operatorname{tr}(J)=1\)</span>, se obtiene <span class="math notranslate nohighlight">\(\operatorname{tr}(H-J)=p-1\)</span>. Por tanto
+$<span class="math notranslate nohighlight">\(
+E[\mathrm{SSR}] = \beta'X'(H-J)X\beta + \sigma^2 (p-1).
+\)</span>$</p>
+<hr class="docutils" />
+<p>Dividiendo por (p-1),
+$<span class="math notranslate nohighlight">\(
+E[\mathrm{MSR}] = \frac{E[\mathrm{SSR}]}{p-1}
+= \sigma^2 \;+\; \frac{\beta'X'(H-J)X\beta}{\,p-1\,}.
+\)</span>$</p>
+</section>
+<section id="demostracion-estadistico-f-0">
+<h2>3.4 Demostración estadístico <span class="math notranslate nohighlight">\(F_0\)</span><a class="headerlink" href="#demostracion-estadistico-f-0" title="Link to this heading">#</a></h2>
+<p>Siendo <span class="math notranslate nohighlight">\(p = k + 1\)</span>,</p>
+<p>y que</p>
+<div class="math notranslate nohighlight">
+\[MSR \sim \chi^2_{k}\]</div>
+<div class="math notranslate nohighlight">
+\[MS_{Res} \sim \chi^2_{n- k - 1}\]</div>
+<p>Entonces, el cociente
+$<span class="math notranslate nohighlight">\(F_0 = \frac{MSR}{MS_{Res}} \sim F_{k, n-k-1}\)</span>$</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">bike-sharing-regression</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="01-introduction.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">1. Introducción</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">0. Guía de Reproducción</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instalacion-de-modulos">0.1 Instalación de módulos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inicializar-jupyter-book">0.2 Inicializar Jupyter-Book</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilar-el-libro">0.3 Compilar el libro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#publicar-en-github-pages">0.4 Publicar en GitHub Pages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-de-carpetas">0.5 Estructura de carpetas</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#obtencion-del-dataset">1. Obtención del dataset</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-del-libro">2. Estructura del libro</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#demostraciones">3. Demostraciones</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-grados-de-libertad-ss-res">3.1 Demostración Grados de Libertad <span class="math notranslate nohighlight">\(SS_{Res}\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ms-res-es-estimador-insesgado-de-sigma-2">3.2 <span class="math notranslate nohighlight">\(MS_{Res}\)</span> es estimador insesgado de <span class="math notranslate nohighlight">\(\sigma^2\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-valor-esperado-del-error-medio-de-regresion">3.3 Demostración Valor esperado del error medio de regresión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-estadistico-f-0">3.4 Demostración estadístico <span class="math notranslate nohighlight">\(F_0\)</span></a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Fabian Manrique
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

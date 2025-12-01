@@ -1,0 +1,1649 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. Inferencia y grados de libertad &#8212; Bike Sharing Regression</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/05-inference';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Diagnóstico de supuestos" href="06-diagnostics.html" />
+    <link rel="prev" title="4. Formulación matricial del modelo OLS (Mínimos cuadrados)" href="04-ols-matrix.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Bike Sharing Regression - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Bike Sharing Regression - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    bike-sharing-regression
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-instructions.html">0. Guía de Reproducción</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="01-introduction.html">1. Introducción</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02-ingenieria-de-variables.html">2. Ingeniería de Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-eda.html">3. Análisis Exploratorio de Series Temporales</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="04-ols-matrix.html">4. Formulación matricial del modelo OLS (Mínimos cuadrados)</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Inferencia y grados de libertad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-diagnostics.html">6. Diagnóstico de supuestos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-robust-methods.html">7. Remedios y métodos robustos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-validation.html">8. Validación y selección de modelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-montecarlo.html">9. Simulación Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-interpretation.html">10. Interpretación de Resultados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-conclusions.html">10. Respuesta a preguntas Iniciales</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Fabian-11037/bike-sharing-regression/tree/main" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Fabian-11037/bike-sharing-regression/tree/main/issues/new?title=Issue%20on%20page%20%2FNotebooks/05-inference.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/Notebooks/05-inference.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>5. Inferencia y grados de libertad</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-grados-de-libertad">5.1 Calculo de grados de libertad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-error-estandar">5.2 Calculo de error estandar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testeo-de-hipotesis-y-p-valor">5.3 Testeo de hipótesis y p-valor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-de-coeficientes">5.4 Tabla de coeficientes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-variables-significativas">5.5 Analisis de variables significativas</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-significantes">Variables Significantes</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="inferencia-y-grados-de-libertad">
+<h1>5. Inferencia y grados de libertad<a class="headerlink" href="#inferencia-y-grados-de-libertad" title="Link to this heading">#</a></h1>
+<p>Importamos los datos y módulos a usar.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>  
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.regression.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">OLS</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;../Data/&#39;</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;X.dat&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;B.dat&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;Y.dat&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span>  <span class="n">sm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;ols_results.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../Data/regressor_columns.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>   <span class="c1">#Pickling</span>
+<span class="o">...</span>   <span class="n">regressor_columns</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;hour-processed2.csv&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regressor_columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;temp&#39;,
+ &#39;hum&#39;,
+ &#39;windspeed&#39;,
+ &#39;yr&#39;,
+ &#39;hr_sin&#39;,
+ &#39;hr_cos&#39;,
+ &#39;weekday_sin&#39;,
+ &#39;weekday_cos&#39;,
+ &#39;day_sin&#39;,
+ &#39;day_cos&#39;,
+ &#39;mnth_sin&#39;,
+ &#39;holiday&#39;,
+ &#39;rush_hour&#39;,
+ &#39;weekend&#39;,
+ &#39;season_2&#39;,
+ &#39;season_3&#39;,
+ &#39;season_4&#39;,
+ &#39;weathersit_2&#39;,
+ &#39;weathersit_3&#39;,
+ &#39;weathersit_4&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="calculo-de-grados-de-libertad">
+<h2>5.1 Calculo de grados de libertad<a class="headerlink" href="#calculo-de-grados-de-libertad" title="Link to this heading">#</a></h2>
+<p>Los grados de libertad de modelo corresponden a número de coeficientes B estimados, asociados a variables regresoras. Es decir, es calculado como:</p>
+<div class="math notranslate nohighlight">
+\[Df_{Model} = m - 1 = k\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Df_Model</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="n">Df_Model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">df_model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Por su parte, los grados de libertad de los residuos corresponden al número de observaciones n menos el total de coeficientes estimados:</p>
+<div class="math notranslate nohighlight">
+\[Df_{Residuals} = n - m = n - (k + 1)\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Df_Residuals</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+
+<span class="n">Df_Residuals</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17358
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">df_resid</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(17358.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Comparando con los grados de libertad total, que se calcula como n - 1, por la perdida de un grado de libertad por la estimación de <span class="math notranslate nohighlight">\(\overline{Y}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[Df_{Total} = n - 1\]</div>
+<p>Por lo que se cumple que:</p>
+<div class="math notranslate nohighlight">
+\[Df_{Total} = n - 1 - k + k\]</div>
+<div class="math notranslate nohighlight">
+\[Df_{Total} = n - (k + 1) + k\]</div>
+<div class="math notranslate nohighlight">
+\[Df_{Total} = Df_{Residuals} + Df_{Model}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Df_Total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="n">Df_Total</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17378
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Df_Residuals</span> <span class="o">+</span> <span class="n">Df_Model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17378
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculo-de-error-estandar">
+<h2>5.2 Calculo de error estandar<a class="headerlink" href="#calculo-de-error-estandar" title="Link to this heading">#</a></h2>
+<p>Para calcular el error estándar de cada coeficiente, primero calculamos el error medio cuadrático, usando la expresión:</p>
+<div class="math notranslate nohighlight">
+\[MSE = \sum \frac{(\hat{y} - y)^2}{df_{residuals}}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Y_pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">B</span>
+
+<span class="n">MSR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">Y_pred</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Df_Residuals</span><span class="p">)</span>
+
+<span class="n">MSR</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(11703.523205548296)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Luego, se obtiene la matriz de covarianza de los estimadores calculada como:</p>
+<div class="math notranslate nohighlight">
+\[COV = (X^T X)\]</div>
+<p>De esta matriz, nos interesa los valores que están en la diagonal central, los cuales corresponderán a la covarianza de los estimadores, incluyendo <span class="math notranslate nohighlight">\(B_0\)</span>.</p>
+<p>Además, dado que para calcular el error estandar es necesario dividir el error cuadratico medio sobre los valores de la covarianza, es necesario sacar su inversa. De esta manera calculamos el error estandar como:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cov_beta</span> <span class="o">=</span> <span class="n">MSR</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span>
+
+<span class="n">std_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov_beta</span><span class="p">))</span>
+
+<span class="n">std_error</span>
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 2.90293353,  1.48780269,  1.11501   ,  0.88498001,  0.82835909,
+        0.95294646,  0.9252434 ,  0.95581636,  1.32903021,  0.82474946,
+        0.82101166,  1.81379079,  5.07064518,  1.93937058,  3.13105939,
+        2.98948671,  4.67889784,  3.84119189,  2.03477839,  3.42510345,
+       62.54072142])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Adicionalmente, podemos calcular errores estándar corregidos por autocorrelación en las variables. Para esto usamos el método de HAC / Newey-West, el cual se encuentra nativamente en statsmodel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Errores estándar HAC (Newey-West)</span>
+<span class="c1"># lag = número de rezagos de autocorrelación a corregir</span>
+<span class="n">nw_lags</span> <span class="o">=</span> <span class="mi">24</span>  <span class="c1"># útil para datos horarios</span>
+
+<span class="n">nw_results</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get_robustcov_results</span><span class="p">(</span><span class="n">cov_type</span><span class="o">=</span><span class="s1">&#39;HAC&#39;</span><span class="p">,</span> <span class="n">maxlags</span><span class="o">=</span><span class="n">nw_lags</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_results</span><span class="o">.</span><span class="n">bse</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 4.40934201,  2.67310381,  1.72235872,  1.2836424 ,  1.22699938,
+        1.56653621,  1.49490571,  1.35032114,  1.84875224,  1.27624315,
+        1.12878744,  2.97087938,  9.70859983,  5.72768631,  4.61972938,
+        4.44306054,  7.06469307,  5.69749609,  2.53477038,  5.3821006 ,
+       51.14970563])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notamos que en la mayoría que los casos, el error estándar es mayor, con excepción de la última variable regresora, la cual disminuye su error estándar.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comparativa_bse</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;Variable Regresora&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;const&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">regressor_columns</span><span class="p">,</span>
+        <span class="s1">&#39;Sin corregir&#39;</span><span class="p">:</span><span class="n">std_error</span><span class="p">,</span>
+        <span class="s1">&#39;Corregido&#39;</span><span class="p">:</span> <span class="n">nw_results</span><span class="o">.</span><span class="n">bse</span>
+    <span class="p">})</span>
+
+<span class="n">comparativa_bse</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Variable Regresora</th>
+      <th>Sin corregir</th>
+      <th>Corregido</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>const</td>
+      <td>2.902934</td>
+      <td>4.409342</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>temp</td>
+      <td>1.487803</td>
+      <td>2.673104</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>hum</td>
+      <td>1.115010</td>
+      <td>1.722359</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>windspeed</td>
+      <td>0.884980</td>
+      <td>1.283642</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>yr</td>
+      <td>0.828359</td>
+      <td>1.226999</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>hr_sin</td>
+      <td>0.952946</td>
+      <td>1.566536</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>hr_cos</td>
+      <td>0.925243</td>
+      <td>1.494906</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>weekday_sin</td>
+      <td>0.955816</td>
+      <td>1.350321</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>weekday_cos</td>
+      <td>1.329030</td>
+      <td>1.848752</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>day_sin</td>
+      <td>0.824749</td>
+      <td>1.276243</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>day_cos</td>
+      <td>0.821012</td>
+      <td>1.128787</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>mnth_sin</td>
+      <td>1.813791</td>
+      <td>2.970879</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>holiday</td>
+      <td>5.070645</td>
+      <td>9.708600</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>rush_hour</td>
+      <td>1.939371</td>
+      <td>5.727686</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>weekend</td>
+      <td>3.131059</td>
+      <td>4.619729</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>season_2</td>
+      <td>2.989487</td>
+      <td>4.443061</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>season_3</td>
+      <td>4.678898</td>
+      <td>7.064693</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>season_4</td>
+      <td>3.841192</td>
+      <td>5.697496</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>weathersit_2</td>
+      <td>2.034778</td>
+      <td>2.534770</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>weathersit_3</td>
+      <td>3.425103</td>
+      <td>5.382101</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>weathersit_4</td>
+      <td>62.540721</td>
+      <td>51.149706</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="testeo-de-hipotesis-y-p-valor">
+<h2>5.3 Testeo de hipótesis y p-valor<a class="headerlink" href="#testeo-de-hipotesis-y-p-valor" title="Link to this heading">#</a></h2>
+<p>Con el error estándar podemos obtener un estadístico t, que nos ayude a validar la hipotesis de significancia del modelo, donde:</p>
+<div class="math notranslate nohighlight">
+\[H_0: B_i = 0, \forall i &gt; 0$&lt;/p&gt; &lt;p style=&quot;text-align:center;&quot;&gt;$H_1: B_i \ne 0, \forall i &gt; 0\]</div>
+<p>Se entiende que si no se puede rechazar la hipotesis nula que el coeficiente asociado a un atributo <span class="math notranslate nohighlight">\(X_i\)</span> es igual a 0, entonces ese atributo no tiene una significancia verdadera en el modelo, por lo cual puede ser descartado. El estadistico t asociado será igual a:
+$<span class="math notranslate nohighlight">\(t_i = \frac{B_i}{se_i}, \forall i &gt; 0\)</span>$</p>
+<p>Y el p valor será igual a:
+$<span class="math notranslate nohighlight">\(p_i = 2 * P(t&gt;|t_i|), \forall i &gt; 0\)</span>$</p>
+<p>Una hipótesis similar se puede realizar para el intercepto <span class="math notranslate nohighlight">\(B_0\)</span>, donde se evalúa la hipótesis de que el modelo pase por el origen, es decir, <span class="math notranslate nohighlight">\(Y=0\)</span> para <span class="math notranslate nohighlight">\(X = 0\)</span>.</p>
+</section>
+<section id="tabla-de-coeficientes">
+<h2>5.4 Tabla de coeficientes<a class="headerlink" href="#tabla-de-coeficientes" title="Link to this heading">#</a></h2>
+<p>Obtenemos la tabla de coeficientes y errores estándar corregido otorgada por statmodels. Comparamos los errores estándares con los calculados:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_results</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">xname</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;const&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">regressor_columns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>            <td>y</td>        <th>  R-squared:         </th>  <td>   0.645</td>  
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th>  <td>   0.644</td>  
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th>  <td>   336.0</td>  
+</tr>
+<tr>
+  <th>Date:</th>             <td>Sun, 30 Nov 2025</td> <th>  Prob (F-statistic):</th>   <td>  0.00</td>   
+</tr>
+<tr>
+  <th>Time:</th>                 <td>15:04:49</td>     <th>  Log-Likelihood:    </th> <td>-1.0605e+05</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td> 17379</td>      <th>  AIC:               </th>  <td>2.121e+05</td> 
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td> 17358</td>      <th>  BIC:               </th>  <td>2.123e+05</td> 
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>    20</td>      <th>                     </th>      <td> </td>     
+</tr>
+<tr>
+  <th>Covariance Type:</th>         <td>HAC</td>       <th>                     </th>      <td> </td>     
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+        <td></td>          <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>const</th>        <td>  130.9370</td> <td>    4.409</td> <td>   29.695</td> <td> 0.000</td> <td>  122.294</td> <td>  139.580</td>
+</tr>
+<tr>
+  <th>temp</th>         <td>   44.3765</td> <td>    2.673</td> <td>   16.601</td> <td> 0.000</td> <td>   39.137</td> <td>   49.616</td>
+</tr>
+<tr>
+  <th>hum</th>          <td>  -12.2448</td> <td>    1.722</td> <td>   -7.109</td> <td> 0.000</td> <td>  -15.621</td> <td>   -8.869</td>
+</tr>
+<tr>
+  <th>windspeed</th>    <td>   -3.5600</td> <td>    1.284</td> <td>   -2.773</td> <td> 0.006</td> <td>   -6.076</td> <td>   -1.044</td>
+</tr>
+<tr>
+  <th>yr</th>           <td>   42.9048</td> <td>    1.227</td> <td>   34.967</td> <td> 0.000</td> <td>   40.500</td> <td>   45.310</td>
+</tr>
+<tr>
+  <th>hr_sin</th>       <td>  -59.3455</td> <td>    1.567</td> <td>  -37.883</td> <td> 0.000</td> <td>  -62.416</td> <td>  -56.275</td>
+</tr>
+<tr>
+  <th>hr_cos</th>       <td>  -52.6864</td> <td>    1.495</td> <td>  -35.244</td> <td> 0.000</td> <td>  -55.617</td> <td>  -49.756</td>
+</tr>
+<tr>
+  <th>weekday_sin</th>  <td>   -3.1659</td> <td>    1.350</td> <td>   -2.345</td> <td> 0.019</td> <td>   -5.813</td> <td>   -0.519</td>
+</tr>
+<tr>
+  <th>weekday_cos</th>  <td>   -1.3072</td> <td>    1.849</td> <td>   -0.707</td> <td> 0.480</td> <td>   -4.931</td> <td>    2.317</td>
+</tr>
+<tr>
+  <th>day_sin</th>      <td>    1.9161</td> <td>    1.276</td> <td>    1.501</td> <td> 0.133</td> <td>   -0.585</td> <td>    4.418</td>
+</tr>
+<tr>
+  <th>day_cos</th>      <td>   -3.7188</td> <td>    1.129</td> <td>   -3.294</td> <td> 0.001</td> <td>   -5.931</td> <td>   -1.506</td>
+</tr>
+<tr>
+  <th>mnth_sin</th>     <td>   -7.4187</td> <td>    2.971</td> <td>   -2.497</td> <td> 0.013</td> <td>  -13.242</td> <td>   -1.596</td>
+</tr>
+<tr>
+  <th>holiday</th>      <td>  -29.0991</td> <td>    9.709</td> <td>   -2.997</td> <td> 0.003</td> <td>  -48.129</td> <td>  -10.069</td>
+</tr>
+<tr>
+  <th>rush_hour</th>    <td>  159.2184</td> <td>    5.728</td> <td>   27.798</td> <td> 0.000</td> <td>  147.992</td> <td>  170.445</td>
+</tr>
+<tr>
+  <th>weekend</th>      <td>   -5.3649</td> <td>    4.620</td> <td>   -1.161</td> <td> 0.246</td> <td>  -14.420</td> <td>    3.690</td>
+</tr>
+<tr>
+  <th>season_2</th>     <td>   45.2242</td> <td>    4.443</td> <td>   10.179</td> <td> 0.000</td> <td>   36.515</td> <td>   53.933</td>
+</tr>
+<tr>
+  <th>season_3</th>     <td>   18.8558</td> <td>    7.065</td> <td>    2.669</td> <td> 0.008</td> <td>    5.008</td> <td>   32.703</td>
+</tr>
+<tr>
+  <th>season_4</th>     <td>   54.2928</td> <td>    5.697</td> <td>    9.529</td> <td> 0.000</td> <td>   43.125</td> <td>   65.460</td>
+</tr>
+<tr>
+  <th>weathersit_2</th> <td>  -12.0554</td> <td>    2.535</td> <td>   -4.756</td> <td> 0.000</td> <td>  -17.024</td> <td>   -7.087</td>
+</tr>
+<tr>
+  <th>weathersit_3</th> <td>  -67.4484</td> <td>    5.382</td> <td>  -12.532</td> <td> 0.000</td> <td>  -77.998</td> <td>  -56.899</td>
+</tr>
+<tr>
+  <th>weathersit_4</th> <td>  -59.8011</td> <td>   51.150</td> <td>   -1.169</td> <td> 0.242</td> <td> -160.060</td> <td>   40.457</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td>2144.704</td> <th>  Durbin-Watson:     </th> <td>   0.729</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th>  <td> 0.000</td>  <th>  Jarque-Bera (JB):  </th> <td>3997.591</td>
+</tr>
+<tr>
+  <th>Skew:</th>           <td> 0.807</td>  <th>  Prob(JB):          </th> <td>    0.00</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>       <td> 4.708</td>  <th>  Cond. No.          </th> <td>    101.</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 24 lags and without small sample correction</div></div>
+</div>
+<p>Analizando la tabla, llegamos a las siguientes conclusiones:</p>
+<ul class="simple">
+<li><p>El intercepto obtenido es positivo, se rechaza hipotesis nula de que sea 0.</p></li>
+<li><p>Los parámetros <span class="math notranslate nohighlight">\(B_1, B_4, B_{13}, B_{15}, B_{16}\)</span> y <span class="math notranslate nohighlight">\(B_{17}\)</span> son positivos, con p-valor inferior a 5%, por lo que se rechaza la hipótesis nula que sean 0 y no tengan significancia en el modelo. Que sean positivos implica un incremento en el atributo <span class="math notranslate nohighlight">\(X_i\)</span> implica un aumento en el número de bicicletas alquiladas.</p></li>
+<li><p>Los parámetros <span class="math notranslate nohighlight">\(B_2, B_3, B_5, B_6, B_7, B_{10}, B_{11}, B_{12}, B_{18}\)</span> y <span class="math notranslate nohighlight">\(B_{19}\)</span> son negativos, con p-valor inferior a 5%, por lo que se rechaza la hipótesis nula que sean 0 y no tengan significancia en el modelo. Que sean negativos implica un incremento en el atributo <span class="math notranslate nohighlight">\(X_i\)</span> implica una reducción en el número de bicicletas alquiladas.</p></li>
+<li><p>Los parámetros <span class="math notranslate nohighlight">\(B_8, B_9, B_{14}\)</span> y <span class="math notranslate nohighlight">\(B_{20}\)</span> tienen un p-valor superior al 5%, por lo que no se puede rechazar la hipótesis nula de que es igual a 0. Por tanto, podemos asumir que su significancia en el modelo es nula, en comparación a los otros parámetros.</p></li>
+</ul>
+</section>
+<section id="analisis-de-variables-significativas">
+<h2>5.5 Analisis de variables significativas<a class="headerlink" href="#analisis-de-variables-significativas" title="Link to this heading">#</a></h2>
+<p>De esta manera, llegamos a la conclusión que las variables más significativas del modelo son:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">float_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:20,.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span>
+
+<span class="n">pvalues_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;Variable Regresora&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;const&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">regressor_columns</span><span class="p">,</span>
+        <span class="s1">&#39;Coeficiente&#39;</span><span class="p">:</span> <span class="n">nw_results</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+        <span class="s1">&#39;p-value&#39;</span><span class="p">:</span> <span class="n">nw_results</span><span class="o">.</span><span class="n">pvalues</span>
+    <span class="p">})</span>
+
+<span class="n">pvalues_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Variable Regresora</th>
+      <th>Coeficiente</th>
+      <th>p-value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>const</td>
+      <td>130.9370</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>temp</td>
+      <td>44.3765</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>hum</td>
+      <td>-12.2448</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>windspeed</td>
+      <td>-3.5600</td>
+      <td>0.0056</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>yr</td>
+      <td>42.9048</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>hr_sin</td>
+      <td>-59.3455</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>hr_cos</td>
+      <td>-52.6864</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>weekday_sin</td>
+      <td>-3.1659</td>
+      <td>0.0191</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>weekday_cos</td>
+      <td>-1.3072</td>
+      <td>0.4795</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>day_sin</td>
+      <td>1.9161</td>
+      <td>0.1333</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>day_cos</td>
+      <td>-3.7188</td>
+      <td>0.0010</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>mnth_sin</td>
+      <td>-7.4187</td>
+      <td>0.0125</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>holiday</td>
+      <td>-29.0991</td>
+      <td>0.0027</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>rush_hour</td>
+      <td>159.2184</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>weekend</td>
+      <td>-5.3649</td>
+      <td>0.2455</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>season_2</td>
+      <td>45.2242</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>season_3</td>
+      <td>18.8558</td>
+      <td>0.0076</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>season_4</td>
+      <td>54.2928</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>weathersit_2</td>
+      <td>-12.0554</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>weathersit_3</td>
+      <td>-67.4484</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>weathersit_4</td>
+      <td>-59.8011</td>
+      <td>0.2424</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Teniendo en cuenta nuestros p-valores, concluimos que nuestras variables significativas son las siguientes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regressor_columns_def</span> <span class="o">=</span> <span class="p">[</span><span class="n">regressor</span> <span class="k">for</span> <span class="n">regressor</span><span class="p">,</span> <span class="n">pvalue</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;const&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">regressor_columns</span><span class="p">,</span> <span class="n">nw_results</span><span class="o">.</span><span class="n">pvalues</span><span class="p">)</span> <span class="k">if</span> <span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span> <span class="ow">and</span> <span class="n">regressor</span> <span class="o">!=</span> <span class="s1">&#39;const&#39;</span><span class="p">]</span>
+
+<span class="n">regressor_columns_def</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;temp&#39;,
+ &#39;hum&#39;,
+ &#39;windspeed&#39;,
+ &#39;yr&#39;,
+ &#39;hr_sin&#39;,
+ &#39;hr_cos&#39;,
+ &#39;weekday_sin&#39;,
+ &#39;day_cos&#39;,
+ &#39;mnth_sin&#39;,
+ &#39;holiday&#39;,
+ &#39;rush_hour&#39;,
+ &#39;season_2&#39;,
+ &#39;season_3&#39;,
+ &#39;season_4&#39;,
+ &#39;weathersit_2&#39;,
+ &#39;weathersit_3&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>En cambio las no significativas son:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omitted_regressors</span> <span class="o">=</span> <span class="p">[</span><span class="n">regressor</span> <span class="k">for</span> <span class="n">regressor</span> <span class="ow">in</span> <span class="n">regressor_columns</span> <span class="k">if</span> <span class="n">regressor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">regressor_columns_def</span><span class="p">]</span>
+
+<span class="n">omitted_regressors</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;weekday_cos&#39;, &#39;day_sin&#39;, &#39;weekend&#39;, &#39;weathersit_4&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="variables-significantes">
+<h3>Variables Significantes<a class="headerlink" href="#variables-significantes" title="Link to this heading">#</a></h3>
+<p>A continuación, hacemos un análisis de las variables que encontramos son significantes para el modelo</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Qué representa</p></th>
+<th class="head"><p>Relevancia en la predicción</p></th>
+<th class="head"><p>Interpretación práctica</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>temp</strong></p></td>
+<td><p>Continua</p></td>
+<td><p>Temperatura normalizada</p></td>
+<td><p><strong>Muy alta</strong></p></td>
+<td><p>La demanda aumenta en temperaturas cálidas; es uno de los predictores más fuertes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>hum</strong></p></td>
+<td><p>Continua</p></td>
+<td><p>Humedad relativa</p></td>
+<td><p><strong>Alta (negativa)</strong></p></td>
+<td><p>Alta humedad reduce la demanda; anticipa lluvia e incomodidad.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>windspeed</strong></p></td>
+<td><p>Continua</p></td>
+<td><p>Velocidad del viento normalizada</p></td>
+<td><p><strong>Baja a moderada</strong></p></td>
+<td><p>Cambios leves no afectan mucho; vientos fuertes reducen un poco el uso.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>yr</strong></p></td>
+<td><p>Binaria (0=2011, 1=2012)</p></td>
+<td><p>Tendencia anual</p></td>
+<td><p><strong>Alta</strong></p></td>
+<td><p>2012 tiene mucha mayor demanda que 2011 → crecimiento del sistema.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>hr_sin</strong></p></td>
+<td><p>Continua (cíclica)</p></td>
+<td><p>Codificación senoidal de la hora</p></td>
+<td><p><strong>Muy alta</strong></p></td>
+<td><p>Captura patrones horarios: picos 8 AM y 5–6 PM.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>hr_cos</strong></p></td>
+<td><p>Continua (cíclica)</p></td>
+<td><p>Complemento coseno de la hora</p></td>
+<td><p><strong>Muy alta</strong></p></td>
+<td><p>Completa el ciclo horario; mejora predicción de horas tempranas/tardías.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>weekday_sin</strong></p></td>
+<td><p>Continua (cíclica)</p></td>
+<td><p>Ciclo semanal</p></td>
+<td><p><strong>Moderada</strong></p></td>
+<td><p>Mayor demanda jueves–sábado; menor los lunes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>day_cos</strong></p></td>
+<td><p>Continua (cíclica)</p></td>
+<td><p>Representación alterna del ciclo semanal</p></td>
+<td><p><strong>Moderada</strong></p></td>
+<td><p>Ayuda a capturar patrones suaves entre días consecutivos.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>mnth_sin</strong></p></td>
+<td><p>Continua (cíclica)</p></td>
+<td><p>Estacionalidad mensual</p></td>
+<td><p><strong>Alta</strong></p></td>
+<td><p>Mayor uso en verano; menor en invierno.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>holiday</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>1 si es festivo</p></td>
+<td><p><strong>Alta</strong></p></td>
+<td><p>La demanda cambia en festivos; suele ser menor que en fines de semana.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>rush_hour</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>1 si hora pico (7–9 AM, 4–6 PM)</p></td>
+<td><p><strong>Muy alta (especialmente Registered)</strong></p></td>
+<td><p>Captura el efecto laboral; permite diferenciar commuting vs recreativo.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>season_2</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>Primavera</p></td>
+<td><p><strong>Alta</strong></p></td>
+<td><p>Uso mayor que en invierno, pero menor que verano.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>season_3</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>Verano</p></td>
+<td><p><strong>Alta</strong></p></td>
+<td><p>Estación con mayor demanda del año.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>season_4</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>Otoño</p></td>
+<td><p><strong>Alta</strong></p></td>
+<td><p>Demanda buena pero menos que verano.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>weathersit_2</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>Clima “nublado/mist”</p></td>
+<td><p><strong>Moderada</strong></p></td>
+<td><p>Reduce un poco el uso, pero no tanto como lluvia.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>weathersit_3</strong></p></td>
+<td><p>Binaria</p></td>
+<td><p>Lluvia ligera / nieve ligera</p></td>
+<td><p><strong>Muy alta (negativa)</strong></p></td>
+<td><p>Causa una caída fuerte en el uso; es de los predictores más importantes en negativo.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+<p>De esta manera, calculamos nuevamente nuestro modelo, usando únicamente las variables significantes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">regressor_columns_def</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="c1">## inserción de 1</span>
+<span class="n">X_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">X_1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 1.        , -1.33464759,  0.94776791, ...,  0.        ,
+         0.        ,  0.        ],
+       [ 1.        , -1.4385164 ,  0.89590169, ...,  0.        ,
+         0.        ,  0.        ],
+       [ 1.        , -1.4385164 ,  0.89590169, ...,  0.        ,
+         0.        ,  0.        ],
+       ...,
+       [ 1.        , -1.23077877, -0.14142266, ...,  0.        ,
+         0.        ,  0.        ],
+       [ 1.        , -1.23077877, -0.34888753, ...,  0.        ,
+         0.        ,  0.        ],
+       [ 1.        , -1.23077877,  0.11790843, ...,  0.        ,
+         0.        ,  0.        ]], shape=(17379, 17))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_1</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(17379, 17)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Se recalcula el modelo con OLS</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">OLS</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">X_1</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">nw_results</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get_robustcov_results</span><span class="p">(</span><span class="n">cov_type</span><span class="o">=</span><span class="s1">&#39;HAC&#39;</span><span class="p">,</span> <span class="n">maxlags</span><span class="o">=</span><span class="n">nw_lags</span><span class="p">)</span>
+
+<span class="n">nw_results</span><span class="o">.</span><span class="n">params</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([129.16437329,  44.63372485, -12.61389722,  -3.6435151 ,
+        42.8580515 , -59.17368386, -52.55581668,  -2.31210659,
+        -3.726146  ,  -7.29710135, -28.60422653, 159.2707804 ,
+        45.14554603,  18.81016165,  54.63133684, -11.79241125,
+       -66.62038633])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_results</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">xname</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;const&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">regressor_columns_def</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>            <td>y</td>        <th>  R-squared:         </th>  <td>   0.644</td>  
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th>  <td>   0.644</td>  
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th>  <td>   403.1</td>  
+</tr>
+<tr>
+  <th>Date:</th>             <td>Sun, 30 Nov 2025</td> <th>  Prob (F-statistic):</th>   <td>  0.00</td>   
+</tr>
+<tr>
+  <th>Time:</th>                 <td>15:05:10</td>     <th>  Log-Likelihood:    </th> <td>-1.0606e+05</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td> 17379</td>      <th>  AIC:               </th>  <td>2.122e+05</td> 
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td> 17362</td>      <th>  BIC:               </th>  <td>2.123e+05</td> 
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>    16</td>      <th>                     </th>      <td> </td>     
+</tr>
+<tr>
+  <th>Covariance Type:</th>         <td>HAC</td>       <th>                     </th>      <td> </td>     
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+        <td></td>          <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>const</th>        <td>  129.1644</td> <td>    4.367</td> <td>   29.579</td> <td> 0.000</td> <td>  120.605</td> <td>  137.724</td>
+</tr>
+<tr>
+  <th>temp</th>         <td>   44.6337</td> <td>    2.659</td> <td>   16.788</td> <td> 0.000</td> <td>   39.423</td> <td>   49.845</td>
+</tr>
+<tr>
+  <th>hum</th>          <td>  -12.6139</td> <td>    1.709</td> <td>   -7.381</td> <td> 0.000</td> <td>  -15.963</td> <td>   -9.264</td>
+</tr>
+<tr>
+  <th>windspeed</th>    <td>   -3.6435</td> <td>    1.291</td> <td>   -2.822</td> <td> 0.005</td> <td>   -6.174</td> <td>   -1.113</td>
+</tr>
+<tr>
+  <th>yr</th>           <td>   42.8581</td> <td>    1.240</td> <td>   34.555</td> <td> 0.000</td> <td>   40.427</td> <td>   45.289</td>
+</tr>
+<tr>
+  <th>hr_sin</th>       <td>  -59.1737</td> <td>    1.581</td> <td>  -37.427</td> <td> 0.000</td> <td>  -62.273</td> <td>  -56.075</td>
+</tr>
+<tr>
+  <th>hr_cos</th>       <td>  -52.5558</td> <td>    1.498</td> <td>  -35.083</td> <td> 0.000</td> <td>  -55.492</td> <td>  -49.620</td>
+</tr>
+<tr>
+  <th>weekday_sin</th>  <td>   -2.3121</td> <td>    1.204</td> <td>   -1.920</td> <td> 0.055</td> <td>   -4.672</td> <td>    0.048</td>
+</tr>
+<tr>
+  <th>day_cos</th>      <td>   -3.7261</td> <td>    1.137</td> <td>   -3.278</td> <td> 0.001</td> <td>   -5.954</td> <td>   -1.498</td>
+</tr>
+<tr>
+  <th>mnth_sin</th>     <td>   -7.2971</td> <td>    2.986</td> <td>   -2.444</td> <td> 0.015</td> <td>  -13.150</td> <td>   -1.444</td>
+</tr>
+<tr>
+  <th>holiday</th>      <td>  -28.6042</td> <td>    9.417</td> <td>   -3.037</td> <td> 0.002</td> <td>  -47.063</td> <td>  -10.146</td>
+</tr>
+<tr>
+  <th>rush_hour</th>    <td>  159.2708</td> <td>    5.729</td> <td>   27.801</td> <td> 0.000</td> <td>  148.041</td> <td>  170.500</td>
+</tr>
+<tr>
+  <th>season_2</th>     <td>   45.1455</td> <td>    4.473</td> <td>   10.093</td> <td> 0.000</td> <td>   36.379</td> <td>   53.913</td>
+</tr>
+<tr>
+  <th>season_3</th>     <td>   18.8102</td> <td>    7.084</td> <td>    2.655</td> <td> 0.008</td> <td>    4.924</td> <td>   32.696</td>
+</tr>
+<tr>
+  <th>season_4</th>     <td>   54.6313</td> <td>    5.837</td> <td>    9.360</td> <td> 0.000</td> <td>   43.191</td> <td>   66.072</td>
+</tr>
+<tr>
+  <th>weathersit_2</th> <td>  -11.7924</td> <td>    2.553</td> <td>   -4.619</td> <td> 0.000</td> <td>  -16.797</td> <td>   -6.788</td>
+</tr>
+<tr>
+  <th>weathersit_3</th> <td>  -66.6204</td> <td>    5.370</td> <td>  -12.405</td> <td> 0.000</td> <td>  -77.147</td> <td>  -56.094</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td>2110.243</td> <th>  Durbin-Watson:     </th> <td>   0.728</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th>  <td> 0.000</td>  <th>  Jarque-Bera (JB):  </th> <td>3994.669</td>
+</tr>
+<tr>
+  <th>Skew:</th>           <td> 0.790</td>  <th>  Prob(JB):          </th> <td>    0.00</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>       <td> 4.738</td>  <th>  Cond. No.          </th> <td>    10.5</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 24 lags and without small sample correction</div></div>
+</div>
+<hr class="docutils" />
+<p>Tras la obtención de nuestro modelo, procedemos a guardarlo para uso futuro.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_1</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;../Data/X_def.dat&#39;</span><span class="p">)</span>
+<span class="n">nw_results</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;../Data/B_def.dat&#39;</span><span class="p">)</span>
+<span class="n">Y</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;../Data/Y_def.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_results</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../Data/ols_def_results.pickle&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../Data/regressor_columns_def.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>   <span class="c1">#Pickling</span>
+<span class="o">...</span>   <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">regressor_columns_def</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04-ols-matrix.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">4. Formulación matricial del modelo OLS (Mínimos cuadrados)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06-diagnostics.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">6. Diagnóstico de supuestos</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-grados-de-libertad">5.1 Calculo de grados de libertad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-error-estandar">5.2 Calculo de error estandar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testeo-de-hipotesis-y-p-valor">5.3 Testeo de hipótesis y p-valor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-de-coeficientes">5.4 Tabla de coeficientes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-variables-significativas">5.5 Analisis de variables significativas</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-significantes">Variables Significantes</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Fabian Manrique
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
